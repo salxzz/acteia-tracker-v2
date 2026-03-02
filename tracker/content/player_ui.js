@@ -309,20 +309,24 @@ function setupUIEvents(video, container) {
         fsBtn.innerHTML = document.fullscreenElement ? window.ACTEIA_ICONS.exitFullscreen : window.ACTEIA_ICONS.fullscreen;
     });
 
-    // Idle Tracker for Custom UI
+    // Idle Tracker for Custom UI and Mouse Cursor
     let idleTimeout;
     const resetIdleTimer = () => {
         overlay.classList.add('active');
+        container.classList.remove('acteia-idle');
         clearTimeout(idleTimeout);
         idleTimeout = setTimeout(() => {
             if (!video.paused) {
                 overlay.classList.remove('active');
+                container.classList.add('acteia-idle');
             }
         }, 3000); // 3 seconds idle timeout
     };
 
     container.addEventListener('mousemove', resetIdleTimer);
     container.addEventListener('click', resetIdleTimer);
+    // Also track key presses to show UI
+    window.addEventListener('keydown', resetIdleTimer);
     container.addEventListener('touchstart', resetIdleTimer);
     video.addEventListener('play', resetIdleTimer);
     video.addEventListener('pause', () => overlay.classList.add('active'));

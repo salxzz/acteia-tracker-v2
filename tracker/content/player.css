@@ -4,8 +4,11 @@
 .acteia-custom-player-active .jw-controls, 
 .acteia-custom-player-active .jw-display-icon-container, 
 .acteia-custom-player-active .jw-title, 
-.acteia-custom-player-active .jw-controls-backdrop {
-    opacity: 0 !important;
+.acteia-custom-player-active .jw-controls-backdrop,
+.acteia-custom-player-active .jw-logo,
+.acteia-custom-player-active .jw-nextup-container,
+.acteia-custom-player-active .jw-error-msg {
+    display: none !important;
     pointer-events: none !important;
 }
 
@@ -302,6 +305,15 @@
 
 #acteia-custom-overlay.active {
     opacity: 1;
+}
+
+/* Hide Mouse Cursor when Idle */
+.acteia-idle {
+    cursor: none !important;
+}
+
+.acteia-idle * {
+    cursor: none !important;
 }
 
 /* Hiding Site Sidebar and Expanding Player */
