@@ -1,0 +1,450 @@
+/* Complete UI Overhaul for Acteia Player */
+
+/* Only hide default JWPlayer controls safely when our custom UI is active */
+.acteia-custom-player-active .jw-controls, 
+.acteia-custom-player-active .jw-display-icon-container, 
+.acteia-custom-player-active .jw-title, 
+.acteia-custom-player-active .jw-controls-backdrop {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Base Overlay */
+#acteia-custom-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2147483647;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none; /* Allows interacting with video if needed, but we'll re-enable for buttons */
+}
+
+#acteia-custom-overlay * {
+    pointer-events: auto;
+}
+
+/* TOP LEFT: Return Button */
+.acteia-top-bar {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.acteia-top-title {
+    flex: 1;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+    pointer-events: none;
+    letter-spacing: 0.3px;
+}
+
+.acteia-top-spacer {
+    /* Mirrors the back button width to keep title truly centered */
+    min-width: 100px;
+}
+
+.acteia-btn-back {
+    background: transparent;
+    border: none;
+    color: #dedede;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    pointer-events: auto;
+}
+
+.acteia-icon-wrapper {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acteia-btn-back:hover {
+    color: white;
+    transform: translateX(-3px);
+}
+
+/* CENTER: Play/Pause and Seek */
+.acteia-center-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-grow: 1;
+}
+
+.acteia-center-btn {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.acteia-center-btn svg {
+    width: 30px;
+    height: 30px;
+}
+
+.acteia-center-btn:hover {
+    background: rgba(138, 90, 235, 0.9);
+    transform: scale(1.1);
+}
+
+.acteia-center-btn.play-pause {
+    width: 80px;
+    height: 80px;
+}
+
+.acteia-center-btn.play-pause svg {
+    width: 40px;
+    height: 40px;
+}
+
+/* BOTTOM: Controls and Timeline */
+.acteia-bottom-bar {
+    background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+    padding: 40px 20px 20px 20px;
+}
+
+.acteia-timeline-wrapper {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.acteia-timeline-tooltip {
+    position: absolute;
+    bottom: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.acteia-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    position: relative;
+    transition: height 0.2s, background 0.2s;
+}
+
+.acteia-timeline-wrapper:hover .acteia-progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.3);
+}
+
+.acteia-progress-fill {
+    height: 100%;
+    background: #8a5aeb; /* Stremio Purple */
+    border-radius: 2px;
+    width: 0%;
+    position: relative;
+}
+
+.acteia-progress-knob {
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: 0.2s transform, 0.2s opacity;
+}
+
+.acteia-timeline-wrapper:hover .acteia-progress-knob {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.acteia-controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.acteia-left-tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.acteia-tool-btn {
+    background: none;
+    border: none;
+    color: #dedede;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+}
+
+.acteia-tool-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.acteia-tool-btn:hover {
+    color: white;
+    background: rgba(255,255,255,0.1);
+}
+
+/* Episode Selector */
+.acteia-episode-selector {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.acteia-episode-list-btn {
+    background: transparent;
+    border: none;
+    color: #dedede;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+    font-weight: 500;
+}
+
+.acteia-episode-list-btn:hover {
+    color: white;
+    background: rgba(255,255,255,0.1);
+}
+
+.acteia-ep-queue {
+    display: none;
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 15, 18, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    width: 340px;
+    max-height: 380px;
+    overflow-y: auto;
+    border-radius: 14px;
+    z-index: 100;
+    box-shadow: 0 -4px 40px rgba(0,0,0,0.8);
+}
+
+.acteia-ep-queue-header {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+}
+
+/* Hidden elements to show on interaction */
+#acteia-custom-overlay {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#acteia-custom-overlay.active {
+    opacity: 1;
+}
+
+/* Hiding Site Sidebar and Expanding Player */
+.acteia-custom-player-active .episode-sidebar, 
+.acteia-custom-player-active .next-episode-desktop, 
+.acteia-custom-player-active .next-episode-mobile {
+    display: none !important;
+}
+
+.acteia-custom-player-active .player-with-episodes {
+    grid-template-columns: 1fr !important;
+}
+
+.acteia-custom-player-active .player-wrapper {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Fix for black screen / backdrop overlay */
+.acteia-custom-player-active section.backdrop {
+    background: none !important;
+}
+
+.acteia-custom-player-active section.backdrop::before, 
+.acteia-custom-player-active .overlay.position-absolute, 
+.acteia-custom-player-active .jw-preview, 
+.acteia-custom-player-active .jw-title {
+    display: none !important;
+    background: none !important;
+}
+
+.acteia-custom-player-active #jwplayer-container {
+    background: black !important;
+}
+
+.acteia-custom-player-active header {
+    display: none !important; /* Hide site header ONLY on player page as we have our own back button */
+}
+
+/* VOLUME SLIDER */
+.acteia-volume-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.acteia-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0; /* Initially hidden, expands on hover if you want, or keeps fixed */
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    outline: none;
+    transition: width 0.3s;
+    cursor: pointer;
+}
+
+.acteia-volume-container:hover .acteia-volume-slider {
+    width: 80px;
+}
+
+.acteia-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #6a46be;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Time Display and Fullscreen alignment */
+.acteia-right-tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* Custom Scrollbar for Episode Queue */
+.acteia-ep-queue::-webkit-scrollbar {
+    width: 6px;
+}
+.acteia-ep-queue::-webkit-scrollbar-track {
+    background: transparent;
+}
+.acteia-ep-queue::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+}
+.acteia-ep-queue::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.4);
+}
+
+/* Watched Episode Styling */
+.acteia-ep-watched {
+    opacity: 0.5 !important;
+    border-left: 3px solid #8a5aeb !important;
+    background: rgba(255,255,255,0.05) !important;
+}
+
+/* Skip Indicator Animation */
+.acteia-skip-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 100;
+}
+
+.acteia-skip-indicator svg {
+    width: 28px;
+    height: 28px;
+}
+
+.acteia-skip-indicator.left {
+    left: 15%;
+}
+
+.acteia-skip-indicator.right {
+    right: 15%;
+}
+
+@keyframes acteiaSkipFade {
+    0% { opacity: 0; transform: translateY(-50%) scale(0.8); }
+    15% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+    30% { opacity: 1; transform: translateY(-50%) scale(1); }
+    80% { opacity: 1; transform: translateY(-50%) scale(1); }
+    100% { opacity: 0; transform: translateY(-50%) scale(0.9); }
+}
+
+.acteia-skip-animating {
+    animation: acteiaSkipFade 0.6s ease-out forwards;
+}

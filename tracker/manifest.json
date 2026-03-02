@@ -1,0 +1,74 @@
+{
+  "manifest_version": 3,
+  "name": "Acteia Tracker",
+  "version": "1.0",
+  "description": "Track your series and movies progress on Acteia",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webNavigation",
+    "notifications",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "*://acteia.ca/*",
+    "https://*.s3.us-east-005.backblazeb2.com/*",
+    "https://api.tvmaze.com/*",
+    "http://image.tmdb.org/*"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules.json"
+    }]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://acteia.ca/*"],
+      "js": ["content/patches.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "*://acteia.ca/*"
+      ],
+      "js": [
+        "content/content.js",
+        "content/player_ui.js"
+      ],
+      "css": [
+        "content/content.css",
+        "content/player.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      }
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/patches.js"
+      ],
+      "matches": [
+        "*://acteia.ca/*"
+      ]
+    }
+  ]
+}

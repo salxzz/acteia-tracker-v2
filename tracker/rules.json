@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "upgradeScheme" },
+    "condition": {
+      "urlFilter": "http://*",
+      "initiatorDomains": ["acteia.ca"],
+      "resourceTypes": ["image", "media", "script", "stylesheet", "xmlhttprequest", "sub_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { "type": "upgradeScheme" },
+    "condition": {
+      "urlFilter": "http://image.tmdb.org/*",
+      "resourceTypes": ["image"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "Content-Security-Policy",
+          "operation": "append",
+          "value": "upgrade-insecure-requests"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "||acteia.ca",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

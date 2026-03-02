@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Acteia Tracker</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Configurações do Acteia Tracker</h1>
+        
+        <section>
+            <h2>Backup de Dados</h2>
+            <p>Exportar ou importar seus dados de rastreamento (JSON).</p>
+            <div class="btn-group">
+                <button id="export-btn">Exportar Backups</button>
+                <div class="import-wrapper">
+                    <button id="import-trigger">Importar Backup</button>
+                    <input type="file" id="import-input" accept=".json">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Limpeza de Dados</h2>
+            <p>Remover todo o histórico e dados salvos.</p>
+            <button id="clear-btn" class="danger">Limpar Tudo</button>
+        </section>
+
+        <div id="status"></div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
