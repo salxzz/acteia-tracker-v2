@@ -1,17 +1,17 @@
 # Acteia Tracker V2 🚀
 
-O **Acteia Tracker V2** é a evolução definitiva para quem assiste no Acteia. Ele renova o player, rastreia seus episódios automaticamente e limpa todos os erros do console.
+O **Acteia Tracker V2** é a evolução definitiva para quem assiste Acteia no Pc. Ele renova o player, rastreia seus episódios automaticamente e limpa todos os erros do console.
 
 ---
 
 ## 📸 Demonstração
 
 ### Player Moderno com Títulos
-O player agora mostra o nome do filme ou série no topo e possui botões centralizados e elegantes.
+O player agora mostra o nome do filme ou série no topo e possui botões renovados.
 ![Player Customizado](assets/player.png)
 
 ### Histórico Inteligente na Home
-Veja onde você parou diretamente na página inicial com artes de alta qualidade.
+Veja onde você parou diretamente na página inicial.
 ![Histórico na Home](assets/history.png)
 
 ---
