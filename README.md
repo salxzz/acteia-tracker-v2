@@ -1,6 +1,6 @@
 # Acteia Tracker V2 🚀
 
-O **Acteia Tracker V2** é a evolução definitiva para quem assiste no Acteia no Pc. Ele renova o player, rastreia seus episódios automaticamente e limpa todos os erros do console.
+O **Acteia Tracker V2** é a evolução definitiva para quem assiste Acteia no Pc. Ele renova o player, rastreia seus episódios automaticamente e limpa todos os erros do console.
 
 ---
 
