@@ -492,3 +492,127 @@
 body.acteia-custom-player-active.notMovie {
     overflow: hidden !important;
 }
+
+/* History Button */
+.acteia-btn-history {
+    background: transparent;
+    border: none;
+    color: #dedede;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    pointer-events: auto;
+}
+
+.acteia-btn-history:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+/* History Grid from Popup */
+.acteia-series-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 15px;
+}
+
+.acteia-series-card {
+    background: #1a1a1f;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
+    aspect-ratio: 2 / 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.acteia-series-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.acteia-card-img-container {
+    width: 100%;
+    height: 100%;
+    background: #222;
+    position: relative;
+    overflow: hidden;
+}
+
+.acteia-card-img-actual {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.acteia-series-card:hover .acteia-card-img-actual {
+    filter: brightness(0.8);
+}
+
+.acteia-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #2a2a35 0%, #1a1a1f 100%);
+}
+
+.acteia-progress-container-card {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.acteia-progress-bar-card {
+    height: 100%;
+    background: #8a5aeb;
+    box-shadow: 0 0 8px #8a5aeb;
+    border-radius: 0 2px 2px 0;
+}
+
+.acteia-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 10px 10px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.acteia-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    color: white;
+    line-height: normal;
+}
+
+.acteia-card-sub {
+    font-size: 11px;
+    color: #a0a0b0;
+    margin-top: 2px;
+    line-height: normal;
+}

@@ -42,6 +42,7 @@ function createPlayerUI(video) {
         volumeHigh: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
         volumeMute: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.09V4z"/></svg>`,
         fullscreen: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>`,
+        history: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>`,
         exitFullscreen: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`,
         prevEp: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>`,
         nextEp: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>`,
@@ -70,7 +71,11 @@ function createPlayerUI(video) {
                 <div class="acteia-icon-wrapper">${ICONS.back}</div> Inicio
             </button>
             <div class="acteia-top-title" id="acteia-top-title">${topTitle}</div>
-            <div class="acteia-top-spacer"></div>
+            <div class="acteia-top-spacer">
+                <button class="acteia-btn-history" id="acteia-toggle-history-list" title="Histórico">
+                    <div class="acteia-icon-wrapper">${ICONS.history}</div>
+                </button>
+            </div>
         </div>
         
         <div class="acteia-center-controls">
@@ -119,6 +124,11 @@ function createPlayerUI(video) {
             <div class="acteia-ep-queue-header">Lista de Episódios</div>
             <div id="acteia-ep-items-container"></div>
         </div>
+
+        <div id="acteia-history-queue" class="acteia-ep-queue" style="bottom: auto; top: 70px; right: 20px; left: auto; transform: none; width: 420px; max-height: 80vh;">
+            <div class="acteia-ep-queue-header">Seu Histórico</div>
+            <div id="acteia-history-items-container"></div>
+        </div>
         
         <div id="acteia-skip-indicator-left" class="acteia-skip-indicator left">
             ${ICONS.skipBack} -10s
@@ -146,7 +156,9 @@ function setupUIEvents(video, container) {
     const backBtn = document.getElementById('acteia-back-to-inicio');
     const speedBtn = document.getElementById('acteia-speed-btn');
     const epListBtn = document.getElementById('acteia-toggle-ep-list');
+    const epHistoryBtn = document.getElementById('acteia-toggle-history-list');
     const epQueue = document.getElementById('acteia-ep-queue');
+    const historyQueue = document.getElementById('acteia-history-queue');
     const overlay = document.getElementById('acteia-custom-overlay');
     const timelineWrapper = document.getElementById('acteia-timeline-wrapper');
     const timelineTooltip = document.getElementById('acteia-timeline-tooltip');
@@ -420,13 +432,26 @@ function setupUIEvents(video, container) {
         epListBtn.onclick = (e) => {
             e.stopPropagation();
             const isVisible = epQueue.style.display === 'block';
+            historyQueue.style.display = 'none'; // hide history
             epQueue.style.display = isVisible ? 'none' : 'block';
             if (!isVisible) populateEpisodeQueue();
         };
     }
 
+    // History List logic
+    if (epHistoryBtn) {
+        epHistoryBtn.onclick = (e) => {
+            e.stopPropagation();
+            const isVisible = historyQueue.style.display === 'block';
+            epQueue.style.display = 'none'; // hide ep list
+            historyQueue.style.display = isVisible ? 'none' : 'block';
+            if (!isVisible) populateHistoryQueue();
+        };
+    }
+
     document.addEventListener('click', () => {
         epQueue.style.display = 'none';
+        historyQueue.style.display = 'none';
     });
 }
 
@@ -483,6 +508,83 @@ function populateEpisodeQueue() {
     } else {
         renderItems(null);
     }
+}
+
+function populateHistoryQueue() {
+    const container = document.getElementById('acteia-history-items-container');
+    container.innerHTML = '<div style="padding: 15px; color: #aaa; text-align: center;">Carregando histórico...</div>';
+    
+    chrome.storage.local.get(['series'], (storage) => {
+        const series = storage.series || {};
+        
+        container.innerHTML = '';
+        container.className = 'acteia-series-grid';
+
+        const seriesList = Object.values(series).sort((a, b) => new Date(b.lastWatched) - new Date(a.lastWatched));
+        
+        if (seriesList.length === 0) {
+            container.innerHTML = '<div style="padding: 15px; color: #aaa; text-align: center;">Seu histórico está vazio.</div>';
+            container.className = '';
+            return;
+        }
+
+        seriesList.slice(0, 15).forEach(s => {
+            let latestEp = null;
+            let latestDate = null;
+
+            if (!s.seasons) return;
+
+            Object.keys(s.seasons).forEach(sNum => {
+                const season = s.seasons[sNum];
+                if (!season.episodes) return;
+                
+                Object.keys(season.episodes).forEach(eNum => {
+                    const ep = season.episodes[eNum];
+                    const epDate = ep.updatedAt ? new Date(ep.updatedAt) : new Date(0);
+
+                    if (!latestDate || epDate > latestDate) {
+                        latestDate = epDate;
+                        latestEp = { ...ep, season: sNum, episode: eNum };
+                    }
+                });
+            });
+
+            if (!latestEp) return;
+
+            const card = document.createElement('div');
+            card.className = 'acteia-series-card';
+            
+            const duration = latestEp.duration || 1;
+            const progressPerc = latestEp.watched ? 100 : Math.round((latestEp.progress / duration) * 100);
+            
+            const thumbUrl = s.thumbnail || '';
+            const thumbHtml = thumbUrl ? `<img src="${thumbUrl}" alt="${s.title}" class="acteia-card-img-actual" loading="lazy">` : `<div class="acteia-card-img-placeholder">${s.title.charAt(0)}</div>`;
+
+            const isMovie = s.type === 'movie' || latestEp.season === 'movie';
+            const subTitle = isMovie ? 'Filme' : `T${latestEp.season.toString().padStart(2, '0')} E${latestEp.episode.toString().padStart(2, '0')}`;
+
+            card.innerHTML = `
+                <div class="acteia-card-img-container">
+                    ${thumbHtml}
+                    <div class="acteia-progress-container-card">
+                        <div class="acteia-progress-bar-card" style="width: ${progressPerc}%"></div>
+                    </div>
+                    <div class="acteia-card-overlay">
+                        <div class="acteia-card-title" title="${s.title}">${s.title}</div>
+                        <div class="acteia-card-sub">${subTitle}</div>
+                    </div>
+                </div>
+            `;
+
+            card.onclick = () => {
+                if (latestEp.url) {
+                    window.location.href = latestEp.url;
+                }
+            };
+            
+            container.appendChild(card);
+        });
+    });
 }
 
 function formatTime(seconds) {
