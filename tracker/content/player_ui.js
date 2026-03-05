@@ -3,7 +3,17 @@
 function createPlayerUI(video) {
     if (document.getElementById('acteia-custom-overlay')) return;
 
+    const pageUrl = window.location.href;
+    const isMoviePage = pageUrl.toLowerCase().includes('/filme');
 
+    if (!isMoviePage) {
+        document.body.classList.add('notMovie');
+    } else {
+        document.body.classList.add('Movie');
+        if (document.body.classList.contains("notMovie")) {
+            document.body.classList.remove('notMovie');
+        }
+    }
 
     const overlay = document.createElement('div');
     overlay.id = 'acteia-custom-overlay';
